@@ -50,6 +50,9 @@ export function OrdersProvider({ children }: OrdersProviderProps) {
   };
 
   const pickup = (order: Order) => {
+    if (order.state !== "READY") {
+      return;
+    }
     try {
       setOrders((prev) =>
         prev.map((item) =>
