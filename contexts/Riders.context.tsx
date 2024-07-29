@@ -1,0 +1,91 @@
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useOrders } from "./Orders.context";
+import { getRandomId, getRandomInterval } from "@/lib/utils";
+import { Rider } from "@/dtos/Rider.dto";
+import { Order } from "@/dtos/Order.dto";
+
+export type RidersContextProps = {
+  riders: Array<Rider>;
+  handleOrderStatusChange: (
+    order: Order,
+    newStatus: "PENDING" | "IN_PROGRESS" | "READY" | "DELIVERED"
+  ) => void;
+  activateRider: (orderId: string) => void;
+};
+
+export const RidersContext = createContext<RidersContextProps>({
+  riders: [],
+  handleOrderStatusChange: () => {},
+  activateRider: () => {},
+});
+
+export type RidersProviderProps = {
+  children: ReactNode;
+};
+
+export function RidersProvider({ children }: RidersProviderProps) {
+  const [riders, setRiders] = useState<Array<Rider>>([]);
+  const [assignedOrders, setAssignedOrders] = useState<string[]>([]);
+  const { orders, pickup, updateOrderStatus } = useOrders();
+
+  useEffect(() => {
+    const ordersInProgressIds = orders
+      .filter((order) => order.state !== "DELIVERED")
+      .map((order) => order.id);
+
+    const riderWithInvalidOrders = riders.find(
+      (rider) => !ordersInProgressIds.includes(rider.orderWanted.id)
+    );
+
+    if (riderWithInvalidOrders) {
+      const newRidersList = riders.filter(
+        (item) => riderWithInvalidOrders.id !== item.id
+      );
+      setRiders(newRidersList);
+    }
+  }, [orders, riders]);
+
+  const handleOrderStatusChange = (
+    order: Order,
+    newStatus: "PENDING" | "IN_PROGRESS" | "READY" | "DELIVERED"
+  ) => {
+    if (newStatus === "IN_PROGRESS" && !assignedOrders.includes(order.id)) {
+      setAssignedOrders((prev) => [...prev, order.id]);
+      setTimeout(() => {
+        setRiders((prev) => [
+          ...prev,
+          {
+            orderWanted: order,
+            pickup,
+            id: getRandomId(),
+          },
+        ]);
+      }, getRandomInterval(2_000, 5_000));
+    }
+    updateOrderStatus(order.id, newStatus);
+  };
+
+  const activateRider = (orderId: string) => {
+    setRiders((prev) =>
+      prev.filter((rider) => rider.orderWanted.id !== orderId)
+    );
+    setAssignedOrders((prev) => prev.filter((id) => id !== orderId));
+    updateOrderStatus(orderId, "DELIVERED");
+  };
+
+  return (
+    <RidersContext.Provider
+      value={{ riders, handleOrderStatusChange, activateRider }}
+    >
+      {children}
+    </RidersContext.Provider>
+  );
+}
+
+export const useRiders = () => useContext(RidersContext);

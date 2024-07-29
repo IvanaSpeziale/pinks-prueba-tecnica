@@ -1,0 +1,31 @@
+{
+  "name": "pinks-tech-test",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "next": "14.2.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "sass": "^1.76.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  },
+  "description": "En este desafío, te enfrentarás a la tarea de gestionar varias órdenes de manera simultánea utilizando tus habilidades y creatividad para resolver un problema único: las órdenes son enviadas a través de Glovo, y necesitamos permitir que nuestro equipo en la tienda opere el Kanban para poder entregar los pedidos a los riders de manera eficiente.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "author": "",
+  "license": "ISC"
+}
