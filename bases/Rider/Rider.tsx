@@ -1,13 +1,20 @@
 import { Rider as RiderProps } from "@/dtos/Rider.dto";
 import s from "./Rider.module.scss";
+import { useGetOrderById } from "./hooks";
 export default function Rider(props: RiderProps) {
+  const { orderWanted, pickup } = props;
+
+  const order = useGetOrderById(orderWanted.id);
+
+  const handleOnClick = () => {
+    if (order) {
+      pickup(order);
+    }
+  };
   return (
-    <div
-      onClick={() => props.pickup(props.orderWanted)}
-      className={s["pk-rider__container"]}
-    >
+    <div onClick={() => handleOnClick()} className={s["pk-rider__container"]}>
       <div className={s["pk-rider__order"]}>
-        <b>{props.orderWanted.id} !!</b>
+        <b>{orderWanted.id} !!</b>
       </div>
       <svg
         className={s["pk-rider"]}

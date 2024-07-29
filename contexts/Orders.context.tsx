@@ -7,13 +7,11 @@ import {
 } from "react";
 import { Order } from "@/dtos/Order.dto";
 import { OrderOrchestrator } from "@/lib";
+import { OrderStatus } from "@/constants/constants";
 
 export type OrdersContextProps = {
   orders: Array<Order>;
-  updateOrderStatus: (
-    orderId: string,
-    newStatus: "PENDING" | "IN_PROGRESS" | "READY" | "DELIVERED"
-  ) => void;
+  updateOrderStatus: (orderId: string, newStatus: OrderStatus) => void;
   pickup: (order: Order) => void;
 };
 
@@ -38,10 +36,7 @@ export function OrdersProvider({ children }: OrdersProviderProps) {
     });
   }, []);
 
-  const updateOrderStatus = (
-    orderId: string,
-    newStatus: "PENDING" | "IN_PROGRESS" | "READY" | "DELIVERED"
-  ) => {
+  const updateOrderStatus = (orderId: string, newStatus: OrderStatus) => {
     setOrders((prev) =>
       prev.map((order) =>
         order.id === orderId ? { ...order, state: newStatus } : order
@@ -50,13 +45,15 @@ export function OrdersProvider({ children }: OrdersProviderProps) {
   };
 
   const pickup = (order: Order) => {
-    if (order.state !== "READY") {
+    if (order.state !== OrderStatus.READY) {
       return;
     }
     try {
       setOrders((prev) =>
         prev.map((item) =>
-          item.id === order.id ? { ...item, state: "DELIVERED" } : item
+          item.id === order.id
+            ? { ...item, state: OrderStatus.DELIVERED }
+            : item
         )
       );
       alert("La orden ha sido recogida!");
