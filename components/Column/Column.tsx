@@ -2,12 +2,10 @@ import { useState } from "react";
 import s from "./Column.module.scss";
 import { Order } from "@/dtos/Order.dto";
 import Card from "../Card";
-import { OrderStatus } from "@/constants/constants";
 
 export type ColumnProps = {
   orders: Array<Order>;
   title: string;
-  onClick?: (order: Order, newStatus: OrderStatus) => void;
   paginated?: boolean;
 };
 

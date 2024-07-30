@@ -5,7 +5,11 @@ import { useRiders } from "@/contexts/Riders.context";
 import { OrderStatus } from "@/constants/constants";
 import { getNextStatus, getPrevStatus } from "./utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faArrowRight,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 
 type CardProps = {
   order: Order;
@@ -13,11 +17,11 @@ type CardProps = {
 
 export default function Card(props: CardProps) {
   const { updateOrderStatus } = useOrders();
-  const { handleOrderStatusChange } = useRiders();
+  const { handleRiderCreation } = useRiders();
 
   const handleClick = (order: Order, newStatus: OrderStatus) => {
     updateOrderStatus(order.id, newStatus);
-    handleOrderStatusChange(order, newStatus);
+    handleRiderCreation(order, newStatus);
   };
 
   const { order } = props;
@@ -54,6 +58,11 @@ export default function Card(props: CardProps) {
               <FontAwesomeIcon icon={faArrowRight} />
             </button>
           )}
+        {order.state !== OrderStatus.DELIVERED && (
+          <button onClick={() => handleClick(order, OrderStatus.CANCELED)}>
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        )}
       </div>
     </div>
   );
@@ -71,11 +80,11 @@ export default function Card(props: CardProps) {
 // };
 // export default function Card(props: cardProps) {
 //   const { updateOrderStatus } = useOrders();
-//   const { handleOrderStatusChange } = useRiders();
+//   const { handleRiderCreation } = useRiders();
 
 //   const handleClick = (order: Order, newStatus: OrderStatus) => {
 //     updateOrderStatus(order.id, newStatus);
-//     handleOrderStatusChange(order, newStatus);
+//     handleRiderCreation(order, newStatus);
 //   };
 
 //   const { order } = props;

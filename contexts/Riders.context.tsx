@@ -13,12 +13,12 @@ import { OrderStatus } from "@/constants/constants";
 
 export type RidersContextProps = {
   riders: Array<Rider>;
-  handleOrderStatusChange: (order: Order, newStatus: OrderStatus) => void;
+  handleRiderCreation: (order: Order, newStatus: OrderStatus) => void;
 };
 
 export const RidersContext = createContext<RidersContextProps>({
   riders: [],
-  handleOrderStatusChange: () => {},
+  handleRiderCreation: () => {},
 });
 
 export type RidersProviderProps = {
@@ -32,7 +32,11 @@ export function RidersProvider({ children }: RidersProviderProps) {
 
   useEffect(() => {
     const ordersInProgressIds = orders
-      .filter((order) => order.state !== OrderStatus.DELIVERED)
+      .filter((order) => {
+        return ![OrderStatus.DELIVERED, OrderStatus.CANCELED].includes(
+          order.state
+        );
+      })
       .map((order) => order.id);
 
     const riderWithInvalidOrders = riders.find(
@@ -47,7 +51,7 @@ export function RidersProvider({ children }: RidersProviderProps) {
     }
   }, [orders]);
 
-  const handleOrderStatusChange = (order: Order, newStatus: OrderStatus) => {
+  const handleRiderCreation = (order: Order, newStatus: OrderStatus) => {
     if (
       newStatus === OrderStatus.IN_PROGRESS &&
       !assignedOrders.includes(order.id)
@@ -68,7 +72,7 @@ export function RidersProvider({ children }: RidersProviderProps) {
   };
 
   return (
-    <RidersContext.Provider value={{ riders, handleOrderStatusChange }}>
+    <RidersContext.Provider value={{ riders, handleRiderCreation }}>
       {children}
     </RidersContext.Provider>
   );
