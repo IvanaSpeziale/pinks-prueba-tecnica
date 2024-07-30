@@ -14,6 +14,7 @@ export type ColumnProps = {
 const ITEMS_PER_PAGE = 3;
 
 export default function Column(props: ColumnProps) {
+  const { orders, title, paginated } = props;
   const [currentPage, setCurrentPage] = useState(0);
 
   const handleNextPage = () => {
@@ -31,12 +32,12 @@ export default function Column(props: ColumnProps) {
   return (
     <div className={s["pk-column"]}>
       <div className={s["pk-column__title"]}>
-        <h3>{props.title}</h3>
+        <h3>{title}</h3>
       </div>
-      {props.orders.map((order) => (
+      {orders.map((order) => (
         <Card order={order} />
       ))}
-      {props.paginated && (
+      {paginated && (
         <div className={s["pk-pagination"]}>
           <button onClick={handlePrevPage} disabled={currentPage === 0}>
             Anterior
@@ -44,7 +45,7 @@ export default function Column(props: ColumnProps) {
           <button
             onClick={handleNextPage}
             disabled={
-              currentPage >= Math.ceil(props.orders.length / ITEMS_PER_PAGE) - 1
+              currentPage >= Math.ceil(orders.length / ITEMS_PER_PAGE) - 1
             }
           >
             Siguiente

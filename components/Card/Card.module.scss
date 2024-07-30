@@ -1,15 +1,36 @@
 @import "/styles/variables.scss";
 
 .pk-card {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
   background-color: #fff;
-  border: 1px solid $gray-1000;
-  border-radius: 12px;
-  height: 100px;
-  padding: 12px;
-  cursor: pointer;
-  &:hover {
-    transform: scale(0.99);
-    background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+
+  > div {
+    margin-bottom: 8px;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      padding: 0;
+
+      &:hover {
+        color: #d5f1ad;
+      }
+    }
   }
 }

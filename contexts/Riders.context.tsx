@@ -9,13 +9,11 @@ import { useOrders } from "./Orders.context";
 import { getRandomId, getRandomInterval } from "@/lib/utils";
 import { Rider } from "@/dtos/Rider.dto";
 import { Order } from "@/dtos/Order.dto";
+import { OrderStatus } from "@/constants/constants";
 
 export type RidersContextProps = {
   riders: Array<Rider>;
-  handleOrderStatusChange: (
-    order: Order,
-    newStatus: "PENDING" | "IN_PROGRESS" | "READY" | "DELIVERED"
-  ) => void;
+  handleOrderStatusChange: (order: Order, newStatus: OrderStatus) => void;
 };
 
 export const RidersContext = createContext<RidersContextProps>({
@@ -34,7 +32,7 @@ export function RidersProvider({ children }: RidersProviderProps) {
 
   useEffect(() => {
     const ordersInProgressIds = orders
-      .filter((order) => order.state !== "DELIVERED")
+      .filter((order) => order.state !== OrderStatus.DELIVERED)
       .map((order) => order.id);
 
     const riderWithInvalidOrders = riders.find(
@@ -49,11 +47,11 @@ export function RidersProvider({ children }: RidersProviderProps) {
     }
   }, [orders]);
 
-  const handleOrderStatusChange = (
-    order: Order,
-    newStatus: "PENDING" | "IN_PROGRESS" | "READY" | "DELIVERED"
-  ) => {
-    if (newStatus === "IN_PROGRESS" && !assignedOrders.includes(order.id)) {
+  const handleOrderStatusChange = (order: Order, newStatus: OrderStatus) => {
+    if (
+      newStatus === OrderStatus.IN_PROGRESS &&
+      !assignedOrders.includes(order.id)
+    ) {
       setAssignedOrders((prev) => [...prev, order.id]);
       setTimeout(() => {
         setRiders((prev) => [
