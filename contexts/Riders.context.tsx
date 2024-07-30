@@ -62,19 +62,6 @@ export function RidersProvider({ children }: RidersProviderProps) {
             id: getRandomId(),
           },
         ]);
-        // setRiders((prev) => [
-        //   ...prev,
-        //   {
-        //     orderWanted: order,
-        //     pickup: (order: Order) => {
-        //       if (order) {
-        //         // Implementación de la función pickup
-        //         console.log("Picking up order:", order);
-        //       }
-        //     },
-        //     id: getRandomId(),
-        //   },
-        // ]);
       }, getRandomInterval(2_000, 5_000));
     }
     updateOrderStatus(order.id, newStatus);
