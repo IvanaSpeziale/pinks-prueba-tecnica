@@ -1,8 +1,9 @@
+import { OrderStatus } from "@/constants/constants";
 import { Item } from "./Item.dto";
 
 export type Order = {
   id: string;
-  state: "PENDING" | "IN_PROGRESS" | "READY" | "DELIVERED";
+  state: OrderStatus;
   items: Array<Item>;
   date: Date;
 };
