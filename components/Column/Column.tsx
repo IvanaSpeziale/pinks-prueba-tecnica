@@ -35,7 +35,7 @@ export default function Column(props: ColumnProps) {
         <h3>{title}</h3>
       </div>
       {orders.map((order) => (
-        <Card order={order} />
+        <Card key={order.id} order={order} />
       ))}
       {paginated && (
         <div className={s["pk-pagination"]}>

@@ -11,5 +11,4 @@ export const orderStatusList: OrderStatus[] = [
   OrderStatus.IN_PROGRESS,
   OrderStatus.READY,
   OrderStatus.DELIVERED,
-  OrderStatus.CANCELED,
 ];
