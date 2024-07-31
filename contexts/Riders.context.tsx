@@ -51,6 +51,26 @@ export function RidersProvider({ children }: RidersProviderProps) {
     }
   }, [orders]);
 
+  // const handleRiderCreation = (order: Order, newStatus: OrderStatus) => {
+  //   if (
+  //     newStatus === OrderStatus.IN_PROGRESS &&
+  //     !assignedOrders.includes(order.id)
+  //   ) {
+  //     setAssignedOrders((prev) => [...prev, order.id]);
+  //     setTimeout(() => {
+  //       setRiders((prev) => [
+  //         ...prev,
+  //         {
+  //           orderWanted: order,
+  //           pickup,
+  //           id: getRandomId(),
+  //         },
+  //       ]);
+  //     }, getRandomInterval(2_000, 5_000));
+  //   }
+  //   updateOrderStatus(order.id, newStatus);
+  // };
+
   const handleRiderCreation = (order: Order, newStatus: OrderStatus) => {
     if (
       newStatus === OrderStatus.IN_PROGRESS &&
@@ -58,11 +78,13 @@ export function RidersProvider({ children }: RidersProviderProps) {
     ) {
       setAssignedOrders((prev) => [...prev, order.id]);
       setTimeout(() => {
-        setRiders((prev) => [
-          ...prev,
+        setRiders((prevRiders) => [
+          ...prevRiders,
           {
             orderWanted: order,
-            pickup,
+            pickup: (order: Order) => {
+              console.log(`Picking up order ${order.id}`);
+            },
             id: getRandomId(),
           },
         ]);
