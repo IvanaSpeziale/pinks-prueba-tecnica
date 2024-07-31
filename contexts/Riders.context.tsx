@@ -13,12 +13,12 @@ import { OrderStatus } from "@/constants/constants";
 
 export type RidersContextProps = {
   riders: Array<Rider>;
-  handleOrderStatusChange: (order: Order, newStatus: OrderStatus) => void;
+  handleRiderCreation: (order: Order, newStatus: OrderStatus) => void;
 };
 
 export const RidersContext = createContext<RidersContextProps>({
   riders: [],
-  handleOrderStatusChange: () => {},
+  handleRiderCreation: () => {},
 });
 
 export type RidersProviderProps = {
@@ -32,7 +32,11 @@ export function RidersProvider({ children }: RidersProviderProps) {
 
   useEffect(() => {
     const ordersInProgressIds = orders
-      .filter((order) => order.state !== OrderStatus.DELIVERED)
+      .filter((order) => {
+        return ![OrderStatus.DELIVERED, OrderStatus.CANCELED].includes(
+          order.state
+        );
+      })
       .map((order) => order.id);
 
     const riderWithInvalidOrders = riders.find(
@@ -47,41 +51,50 @@ export function RidersProvider({ children }: RidersProviderProps) {
     }
   }, [orders]);
 
-  const handleOrderStatusChange = (order: Order, newStatus: OrderStatus) => {
+  // const handleRiderCreation = (order: Order, newStatus: OrderStatus) => {
+  //   if (
+  //     newStatus === OrderStatus.IN_PROGRESS &&
+  //     !assignedOrders.includes(order.id)
+  //   ) {
+  //     setAssignedOrders((prev) => [...prev, order.id]);
+  //     setTimeout(() => {
+  //       setRiders((prev) => [
+  //         ...prev,
+  //         {
+  //           orderWanted: order,
+  //           pickup,
+  //           id: getRandomId(),
+  //         },
+  //       ]);
+  //     }, getRandomInterval(2_000, 5_000));
+  //   }
+  //   updateOrderStatus(order.id, newStatus);
+  // };
+
+  const handleRiderCreation = (order: Order, newStatus: OrderStatus) => {
     if (
       newStatus === OrderStatus.IN_PROGRESS &&
       !assignedOrders.includes(order.id)
     ) {
       setAssignedOrders((prev) => [...prev, order.id]);
       setTimeout(() => {
-        setRiders((prev) => [
-          ...prev,
+        setRiders((prevRiders) => [
+          ...prevRiders,
           {
             orderWanted: order,
-            pickup,
+            pickup: (order: Order) => {
+              console.log(`Picking up order ${order.id}`);
+            },
             id: getRandomId(),
           },
         ]);
-        // setRiders((prev) => [
-        //   ...prev,
-        //   {
-        //     orderWanted: order,
-        //     pickup: (order: Order) => {
-        //       if (order) {
-        //         // Implementación de la función pickup
-        //         console.log("Picking up order:", order);
-        //       }
-        //     },
-        //     id: getRandomId(),
-        //   },
-        // ]);
       }, getRandomInterval(2_000, 5_000));
     }
     updateOrderStatus(order.id, newStatus);
   };
 
   return (
-    <RidersContext.Provider value={{ riders, handleOrderStatusChange }}>
+    <RidersContext.Provider value={{ riders, handleRiderCreation }}>
       {children}
     </RidersContext.Provider>
   );
