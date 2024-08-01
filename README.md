@@ -1,4 +1,4 @@
-# Pink's KDS: Krazy Display Service Challenge
+# Pink's KDS: Krazy Display Service Challenge - Ivana Speziale
 
 En este desafío, te enfrentarás a la tarea de gestionar varias órdenes de manera simultánea utilizando tus habilidades y creatividad para resolver un problema único: las órdenes son enviadas a través de Glovo, y necesitamos permitir que nuestro equipo en la tienda opere el Kanban para poder entregar los pedidos a los riders de manera eficiente.
 

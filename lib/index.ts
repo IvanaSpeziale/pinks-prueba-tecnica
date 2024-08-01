@@ -1,6 +1,7 @@
 import { Order } from "@/dtos/Order.dto";
 import { EventEmitter } from "events";
 import { getRandomId, getRandomInterval } from "./utils";
+import { OrderStatus } from "@/constants/constants";
 
 export class OrderOrchestrator {
   private interval: NodeJS.Timeout | undefined;
@@ -15,7 +16,7 @@ export class OrderOrchestrator {
     this.interval = setInterval(() => {
       this.emit({
         id: getRandomId(),
-        state: "PENDING",
+        state: OrderStatus.PENDING,
         items: [],
         date: new Date(),
       });

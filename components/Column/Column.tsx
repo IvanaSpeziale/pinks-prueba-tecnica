@@ -9,7 +9,7 @@ export type ColumnProps = {
   paginated?: boolean;
 };
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 4;
 
 export default function Column(props: ColumnProps) {
   const { orders, title, paginated } = props;
@@ -27,12 +27,19 @@ export default function Column(props: ColumnProps) {
     }
   };
 
+  const paginatedOrders = paginated
+    ? orders.slice(
+        currentPage * ITEMS_PER_PAGE,
+        (currentPage + 1) * ITEMS_PER_PAGE
+      )
+    : orders;
+
   return (
     <div className={s["pk-column"]}>
       <div className={s["pk-column__title"]}>
         <h3>{title}</h3>
       </div>
-      {orders.map((order) => (
+      {paginatedOrders.map((order) => (
         <Card key={order.id} order={order} />
       ))}
       {paginated && (

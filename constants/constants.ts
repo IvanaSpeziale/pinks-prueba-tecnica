@@ -13,13 +13,19 @@ export const orderStatusList: OrderStatus[] = [
   OrderStatus.DELIVERED,
 ];
 
-export const columnDisplayList = [
+export type ColumnDisplayConfig = {
+  title: string;
+  state: OrderStatus;
+  paginated: boolean;
+};
+
+export const columnDisplayList: ColumnDisplayConfig[] = [
   { title: "Pendiente", state: OrderStatus.PENDING, paginated: false },
-  { title: "En preparacion", state: OrderStatus.IN_PROGRESS, paginated: false },
+  { title: "En preparación", state: OrderStatus.IN_PROGRESS, paginated: false },
   { title: "Listo", state: OrderStatus.READY, paginated: false },
 ];
 
-export const columnDisplayHistoryList = [
+export const columnDisplayHistoryList: ColumnDisplayConfig[] = [
   { title: "Entregado", state: OrderStatus.DELIVERED, paginated: true },
   { title: "Cancelado", state: OrderStatus.CANCELED, paginated: true },
 ];
